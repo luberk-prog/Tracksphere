@@ -15,11 +15,17 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Radio, Eye, EyeOff, Loader2 } from "lucide-react";
+import { Loader2, ArrowRight, Eye, EyeOff, Lock, Radio } from "lucide-react";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { api } from "@/lib/api-client";
+import { useAuthStore } from "@/stores/auth-store";
 
 export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
+  const [serverError, setServerError] = useState<string | null>(null);
+  const router = useRouter();
+  const setAuth = useAuthStore((state) => state.setAuth);
 
   const {
     register,
@@ -30,8 +36,17 @@ export default function LoginPage() {
   });
 
   const onSubmit = async (data: LoginInput) => {
-    // TODO: Integrate with API in Sprint 2
-    console.log("Login:", data);
+    try {
+      setServerError(null);
+      const response = await api.post<any>("/auth/login", data);
+      
+      if (response.success) {
+        setAuth(response.data.user, response.data.token);
+        router.push("/dashboard");
+      }
+    } catch (error) {
+      setServerError(error instanceof Error ? error.message : "Login failed. Please check your credentials.");
+    }
   };
 
   return (

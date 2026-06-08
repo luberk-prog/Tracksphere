@@ -25,6 +25,9 @@ model User {
   followers Follow[] @relation("following")
   following Follow[] @relation("follower")
 
+  friends1 Friendship[] @relation("friend1")
+  friends2 Friendship[] @relation("friend2")
+
   @@map("users")
 }
 
@@ -59,5 +62,25 @@ model Follow {
   following User @relation("following", fields: [followingId], references: [id], onDelete: Cascade)
 
   @@unique([followerId, followingId])
+  @@index([followerId])
+  @@index([followingId])
   @@map("follows")
+}
+
+// ========================
+// Friendship Model
+// ========================
+model Friendship {
+  id        String   @id @default(cuid())
+  userOneId String
+  userTwoId String
+  createdAt DateTime @default(now())
+
+  userOne User @relation("friend1", fields: [userOneId], references: [id], onDelete: Cascade)
+  userTwo User @relation("friend2", fields: [userTwoId], references: [id], onDelete: Cascade)
+
+  @@unique([userOneId, userTwoId])
+  @@index([userOneId])
+  @@index([userTwoId])
+  @@map("friendships")
 }

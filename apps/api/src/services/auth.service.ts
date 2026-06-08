@@ -56,6 +56,16 @@ export class AuthService {
     const { passwordHash: _, ...userWithoutPassword } = user;
     return { user: userWithoutPassword, token };
   }
+
+  async getCurrentUser(userId: string) {
+    const user = await userRepository.findById(userId);
+    if (!user) {
+      throw new Error("User not found");
+    }
+
+    const { passwordHash: _, ...userWithoutPassword } = user;
+    return userWithoutPassword;
+  }
 }
 
 export const authService = new AuthService();

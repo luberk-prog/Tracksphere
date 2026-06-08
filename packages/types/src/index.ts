@@ -68,3 +68,31 @@ export interface LoginDto {
   email: string;
   password: string;
 }
+
+// ========================
+// Profile DTOs
+// ========================
+export interface ProfileUpdateDto {
+  fullName?: string;
+  bio?: string;
+  avatarUrl?: string;
+  country?: string;
+  city?: string;
+  privacyLevel?: PrivacyLevel;
+}
+
+// ========================
+// Social DTOs
+// ========================
+export interface FollowResponse {
+  isFollowing: boolean;
+  followerCount: number;
+  followingCount: number;
+}
+
+export interface FriendshipResponse {
+  id: string;
+  userOneId: string;
+  userTwoId: string;
+  createdAt: Date;
+}

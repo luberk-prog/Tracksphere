@@ -1,10 +1,15 @@
 import { create } from "zustand";
+import { persist, createJSONStorage } from "zustand/middleware";
 
 interface User {
   id: string;
   username: string;
   email: string;
   isVerified: boolean;
+  profile?: {
+    fullName: string | null;
+    avatarUrl: string | null;
+  };
 }
 
 interface AuthState {
@@ -15,12 +20,20 @@ interface AuthState {
   logout: () => void;
 }
 
-export const useAuthStore = create<AuthState>((set) => ({
-  user: null,
-  token: null,
-  isAuthenticated: false,
-  setAuth: (user, token) =>
-    set({ user, token, isAuthenticated: true }),
-  logout: () =>
-    set({ user: null, token: null, isAuthenticated: false }),
-}));
+export const useAuthStore = create<AuthState>()(
+  persist(
+    (set) => ({
+      user: null,
+      token: null,
+      isAuthenticated: false,
+      setAuth: (user, token) =>
+        set({ user, token, isAuthenticated: true }),
+      logout: () =>
+        set({ user: null, token: null, isAuthenticated: false }),
+    }),
+    {
+      name: "tracksphere-auth",
+      storage: createJSONStorage(() => localStorage),
+    }
+  )
+);

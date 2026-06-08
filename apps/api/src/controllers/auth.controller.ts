@@ -42,6 +42,38 @@ export class AuthController {
       });
     }
   }
+
+  async me(req: Request, res: Response): Promise<void> {
+    try {
+      if (!req.user) {
+        res.status(401).json({
+          success: false,
+          message: "Unauthorized",
+        });
+        return;
+      }
+
+      const user = await authService.getCurrentUser(req.user.userId);
+      res.status(200).json({
+        success: true,
+        data: { user },
+      });
+    } catch (error) {
+      res.status(500).json({
+        success: false,
+        message: "Internal server error",
+      });
+    }
+  }
+
+  async logout(_req: Request, res: Response): Promise<void> {
+    // JWT logout is typically handled by the client by deleting the token.
+    // We can add logic here if we implement a token blacklist.
+    res.status(200).json({
+      success: true,
+      message: "Logout successful",
+    });
+  }
 }
 
 export const authController = new AuthController();

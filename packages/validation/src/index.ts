@@ -35,7 +35,20 @@ export const loginSchema = z.object({
 });
 
 // ========================
+// Profile Update Schema
+// ========================
+export const profileUpdateSchema = z.object({
+  fullName: z.string().min(2).max(100).optional(),
+  bio: z.string().max(500).optional(),
+  avatarUrl: z.string().url().optional().or(z.literal("")),
+  country: z.string().max(100).optional(),
+  city: z.string().max(100).optional(),
+  privacyLevel: z.enum(["public", "friends", "private"]).optional(),
+});
+
+// ========================
 // Inferred Types
 // ========================
 export type RegisterInput = z.infer<typeof registerSchema>;
 export type LoginInput = z.infer<typeof loginSchema>;
+export type ProfileUpdateInput = z.infer<typeof profileUpdateSchema>;

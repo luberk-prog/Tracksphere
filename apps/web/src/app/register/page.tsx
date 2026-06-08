@@ -17,9 +17,15 @@ import {
 } from "@/components/ui/card";
 import { Radio, Eye, EyeOff, Loader2, CheckCircle2 } from "lucide-react";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { api } from "@/lib/api-client";
+import { useAuthStore } from "@/stores/auth-store";
 
 export default function RegisterPage() {
   const [showPassword, setShowPassword] = useState(false);
+  const [serverError, setServerError] = useState<string | null>(null);
+  const router = useRouter();
+  const setAuth = useAuthStore((state) => state.setAuth);
 
   const {
     register,
@@ -40,8 +46,17 @@ export default function RegisterPage() {
   ];
 
   const onSubmit = async (data: RegisterInput) => {
-    // TODO: Integrate with API in Sprint 2
-    console.log("Register:", data);
+    try {
+      setServerError(null);
+      const response = await api.post<any>("/auth/register", data);
+      
+      if (response.success) {
+        setAuth(response.data.user, response.data.token);
+        router.push("/dashboard");
+      }
+    } catch (error) {
+      setServerError(error instanceof Error ? error.message : "Registration failed");
+    }
   };
 
   return (

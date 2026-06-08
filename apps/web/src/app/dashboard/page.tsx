@@ -105,37 +105,6 @@ export default function DashboardPage() {
                   : "text-muted-foreground hover:text-foreground hover:bg-muted/50"
               }`}
             >
-              <item.icon className="w-4.5 h-4.5" />
-              {item.label}
-            </button>
-          ))}
-        </nav>
-
-        {/* User section */}
-        <div className="p-4 border-t border-border/50">
-          <div className="flex items-center gap-3 px-2">
-            <div className="w-9 h-9 rounded-full bg-neon/20 flex items-center justify-center">
-              <User className="w-4.5 h-4.5 text-neon" />
-            </div>
-            <div className="flex-1 min-w-0">
-              <p className="text-sm font-medium truncate">New User</p>
-              <p className="text-xs text-muted-foreground truncate">
-                user@tracksphere.com
-              </p>
-            </div>
-            <Link href="/login">
-              <Button variant="ghost" size="icon" className="h-8 w-8">
-                <LogOut className="w-4 h-4" />
-              </Button>
-            </Link>
-          </div>
-        </div>
-      </aside>
-
-      {/* Mobile Header */}
-      <header className="lg:hidden fixed top-0 left-0 right-0 h-16 glass z-40 flex items-center justify-between px-4">
-        <div className="flex items-center gap-2">
-          <Radio className="w-5 h-5 text-neon" />
           <span className="font-bold">
             Track<span className="text-neon">Sphere</span>
           </span>
